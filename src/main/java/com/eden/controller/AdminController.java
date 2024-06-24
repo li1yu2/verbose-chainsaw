@@ -26,6 +26,22 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
+	
+	@RequestMapping("login")
+	public String login(String adminname,String password) throws UnsupportedEncodingException {
+		log.info("レビュー管理者名:{}パスワード:{}",adminname,password);
+		
+		try {
+			Admin admin = adminService.login(adminname,password);
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			return "redirect:/login?msg="+URLEncoder.encode(e.getMessage(),"UTF-8");
+		}
+		
+		return "emplist";
+	}
 
 	@RequestMapping("register")
 	public String register(Admin admin, String code, HttpSession session) throws UnsupportedEncodingException {

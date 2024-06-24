@@ -6,4 +6,6 @@ public interface AdminService {
 	
 	void register(Admin admin);
 
+	Admin login(String adminname, String password);
+
 }
