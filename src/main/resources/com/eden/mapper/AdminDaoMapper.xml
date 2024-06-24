@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eden.dao.AdminDao">
+
+	<select id="findByAdmunName" parameterType="String" resultType="Admin">
+	select * from admin where adminname=#{adminname}
+	</select>
+
+	<insert id="save" parameterType="Admin" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO admin
+		VALUES
+		(#{id},#{adminname},#{realname},#{password},#{gender})
+	</insert>
+
+</mapper>
