@@ -28,11 +28,13 @@ public class AdminController {
 	private AdminService adminService;
 	
 	@RequestMapping("login")
-	public String login(String adminname,String password) throws UnsupportedEncodingException {
+	public String login(String adminname,String password,HttpSession session) throws UnsupportedEncodingException {
 		log.info("レビュー管理者名:{}パスワード:{}",adminname,password);
 		
 		try {
-			Admin admin = adminService.login(adminname,password);
+			Admin admin=adminService.login(adminname, password);
+			session.setAttribute("admin", admin);
+		
 			
 		} catch (Exception e) {
 			

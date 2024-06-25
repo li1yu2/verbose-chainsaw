@@ -20,7 +20,7 @@
 					</div>
 					<div id="topheader">
 						<h1 id="title">
-							<a href="/ems_vue/emplist.html">main</a>
+							<a href="/ems_vue/emplist.html">人事管理システム</a>
 						</h1>
 					</div>
 					<div id="navigation">
@@ -30,46 +30,46 @@
 					<p id="whereami">
 					</p>
 					<h1>
-						add Emp info:
+						従業員ページ
 					</h1>
-					<form action="emplist.html" method="post">
+					<form th:action="@{/employee/save}" method="post" enctype="multipart/form-data">
 						<table cellpadding="0" cellspacing="0" border="0"
 							class="form_table">
 							<tr>
 								<td valign="middle" align="right">
-									name:
+									名前:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" v-model="emp.name" name="name" />
+									<input type="text" class="inputgri" name="name"/>
 								</td>
 							</tr>
 							<tr>
 								<td valign="middle" align="right">
-									photo:
+									写真:
 								</td>
 								<td valign="middle" align="left">
-									<input type="file" ref="myPhoto" name="photo" />
+									<input type="file" ref="myPhoto" name="img" />
 								</td>
 							</tr>
 							<tr>
 								<td valign="middle" align="right">
-									salary:
+									給料:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" v-model="emp.salary" name="salary" />
+									<input type="text" class="inputgri"name="salary" />
 								</td>
 							</tr>
 							<tr>
 								<td valign="middle" align="right">
-									age:
+									誕生日:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" v-model="emp.age" name="age" />
+									<input type="text" class="inputgri" name="birthday" />
 								</td>
 							</tr>
 						</table>
 						<p>
-							<input type="button" @click="saveEmp" class="button" value="Confirm" />
+							<input type="submit" class="button" value="従業員の追加" />
 						</p>
 					</form>
 				</div>
