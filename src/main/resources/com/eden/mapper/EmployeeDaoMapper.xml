@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eden.dao.EmployeeDao">
+
+	<insert id="save" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
+		insert into `employee` values(#{id},#{name},#{salary},#{birthday},#{photo})
+	</insert>
+	
+	<select id="lists" resultType="Employee">
+		select * from employee
+	</select>
+	
+	<select id="findById" parameterType="Integer" resultType="Employee">
+		select * from employee where id=#{id}
+	</select>
+</mapper>

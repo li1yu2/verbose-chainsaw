@@ -30,7 +30,7 @@
             </p>
             <h1>
                 ようこそ<span th:if="${session.admin!=null}" th:text="${session.admin.realname}"></span>
-                <span th:if="${session.admin==null}">客様</span>
+                <span th:if="${session.admin==null}">お客様</span>
             </h1>
             <table class="table">
                 <tr class="table_header">
@@ -53,25 +53,26 @@
                         操作
                     </td>
                 </tr>
-                <tr v-for="(emp,index) in emps" :key="emp.id" :class="index%2==0?'row1':'row2'">
+                <tr th:each="employee,state:${employeeList}" th:class="${state.odd?'row1':'row2'}">
                     <td>
-                        {{emp.id}}
+                        <span th:text="${employee.id}"/>
                     </td>
                     <td>
-                        {{emp.name}}
+                        <span th:text="${employee.name}"/>
                     </td>
                     <td>
-                        <img :src="'/ems_vue/'+emp.path" style="height: 40px;">
+                        <img th:src="@{/}+${employee.photo}" style="height: 40px;">
                     </td>
                     <td>
-                        {{emp.salary}}
+                        <span th:text="${employee.salary}"/>
                     </td>
                     <td>
-                        {{emp.age}}
+                        <span th:text="${#dates.format(employee.birthday,'yyyy/MM/dd')}"/>
                     </td>
                     <td>
-                        <a href="javascript:;" @click="delEmp(emp.id)">delete emp</a>&nbsp;<a :href="'/ems_vue/updateEmp.html?id='+emp.id">update
-                        emp</a>
+                        <a href="javascript:;" @click="delEmp(emp.id)">消除</a>&nbsp;
+							
+						<a th:href="@{/employee/detail(id=${employee.id})}">更新</a>
                     </td>
                 </tr>
             </table>
