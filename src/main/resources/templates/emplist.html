@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
     <!--link外部引入-->
+    
 </head>
 <body>
 <div id="wrap">
@@ -32,6 +33,18 @@
                 ようこそ<span th:if="${session.admin!=null}" th:text="${session.admin.realname}"></span>
                 <span th:if="${session.admin==null}">お客様</span>
             </h1>
+        <div style="margin-bottom: 10px;text-align: right;">
+			<form>
+				名前<input tyqe="text" class="inputSearch" name="searchName"/>
+				給料<input tyqe="text" class="inputSearch" name="salaryBegin"/>
+				~<input tyqe="text" class="inputSearch" name="salaryEnd"/>
+				誕生日<input tyqe="text" class="inputSearch" name="dateBegin"
+				placeholder="2000/01/01"/>
+				<input tyqe="text" class="inputSearch" name="dateEnd"
+				placeholder="2000/01/01"/>
+				<input type="submit" value="検査コード"class="button"/>
+			 </form>
+		</div>
             <table class="table">
                 <tr class="table_header">
                     <td>
@@ -70,8 +83,9 @@
                         <span th:text="${#dates.format(employee.birthday,'yyyy/MM/dd')}"/>
                     </td>
                     <td>
-                        <a href="javascript:;" @click="delEmp(emp.id)">消除</a>&nbsp;
-							
+                        <!--<a href="javascript:;" th:onclick="(id=${employee.id})">消除</a>-->
+                        <a href="javascript:;" th:onclick="'delEmp('+${employee.id}+')'">消除</a>
+						<!--<a th:href="@{/employee/delete(id=${employee.id})}">消除</a>&nbsp;-->
 						<a th:href="@{/employee/detail(id=${employee.id})}">更新</a>
                     </td>
                 </tr>
@@ -88,6 +102,13 @@
     </div>
 </div>
 <script>
+	function delEmp(id){
+		console.log(id)
+		if(window.confirm("削除するかどうか")){
+			location.href='[[@{/employee/delete?id=}]]'+id	
+		}
+		
+	}
 	function addEmp(){
 		location.href='[[@{/addEmp}]]'
 	}

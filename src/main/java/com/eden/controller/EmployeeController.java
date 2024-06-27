@@ -29,49 +29,111 @@ public class EmployeeController {
 	@Value("${file.upload.dir}")
 	private String photoPath;
 	
-	@RequestMapping("update")
-	public String update(Employee employee) {
-		log.info("ID:{},名前:{},給料:{},誕生日:{}",
-				employee.getId(),employee.getName(),employee.getSalary(),employee.getBirthday());
-		return "redirectr:/employee/lists";
+	@RequestMapping("delete")
+	public String delete(Integer id) {
+		log.info("削除を受け入れるID:{}",id);
+		
+		String delephoto = employeeService.findById(id).getPhoto();
+		
+		File file= new File(photoPath,delephoto);
+		
+		if(file.exists()) {
+			file.delete();
+		}
+		employeeService.delete(id);
+		
+		return "redirect:/employee/lists";
 	}
+	
+	@RequestMapping("update")
+	public String update(Employee employee,MultipartFile img) throws IllegalStateException, IOException {
+		log.info("受けた値ID:{},名前：{},月給：{},誕生日：{}",
+				employee.getId(),employee.getName(),employee.getSalary(),employee.getBirthday());
+		
+		boolean notempty = !img.isEmpty();
+		log.info("写真を更新するかどうか：{}",notempty);
+		
+		if(notempty) {
+			//古い写真のファイル削除する処理。
+			String oldphoto=employeeService.findById(employee.getId()).getPhoto();
+			
+			/*if(oldphoto==null) {
+				oldphoto=new SimpleDateFormat("yyyyMMddmmssSSS").format(new Date());
+			}*/
+			
+			File file = new File(photoPath,oldphoto);
+			
+			if(file.exists()) file.delete();
+			
+			//新しい写真をアプロードする処理。
+			
+			String fileName=img.getOriginalFilename();
+			
+			String newfileName=uploadPhoto(img,fileName);
+			
+			employee.setPhoto(newfileName);
+			
+		}
+		
+		employeeService.update(employee);
+		
+		return "redirect:/employee/lists";
+	}
+	
 	
 	@RequestMapping("detail")
 	public String detail(Integer id,Model model) {
-		log.info("受けたID:{}",id);
+		log.info("受けたID：{}",id);
+		
 		Employee employee=employeeService.findById(id);
-		model.addAttribute("employee",employee);
+		
+		model.addAttribute("employee", employee);
+		
 		return "updateEmp";
 	}
 	
 	@RequestMapping("save")
-	public String save(Employee employee,MultipartFile img) throws IllegalStateException, IOException{
+	public String save(Employee employee,MultipartFile img) throws IllegalStateException, IOException {
 		
-		log.info("新規従業員の名前:{},給料:{},誕生日:{}",
+		log.info("新規社員の名前：{},月給：{},誕生日：{}",
 				employee.getName(),employee.getSalary(),employee.getBirthday());
 		
-		log.info("写真のファイル名:{},ファイルのサイズ:{}",img.getOriginalFilename(),img.getSize());
+		log.info("写真ファイル名：{},ファイルのサイズ：{}",img.getOriginalFilename(),img.getSize());
 		
 		String fileName=img.getOriginalFilename();
 		
-		String fileSuffix = fileName.substring(fileName.lastIndexOf("."));
+		String newfileName=uploadPhoto(img,fileName);
 		
-		String filePrefix = new SimpleDateFormat("yyyyMMddmmssSSS").format(new Date());
+		employee.setPhoto(newfileName);
+		
+		employeeService.save(employee);
+		
+		return "redirect:/employee/lists";
+	}
+	
+	@RequestMapping("lists")
+	public String lists(Model model) {
+		
+		log.info("全て社員の情報リストを読み込む。");
+		
+		List<Employee> employeeList= employeeService.lists();
+		
+		model.addAttribute("employeeList", employeeList);
+		
+		return "emplist";
+	}
+	
+	private String uploadPhoto(MultipartFile img,String fileName) throws IllegalStateException, IOException {
+		
+		String fileSuffix=fileName.substring(fileName.lastIndexOf("."));
+		
+		String filePrefix = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
 		
 		String newfileName=filePrefix+fileSuffix;
 		
 		img.transferTo(new File(photoPath,newfileName));
 		
-		employee.setPhoto(newfileName);
-		
-		employeeService.save(employee);
-		return "redirect:/employee/lists";
+		return newfileName;
 	}
-	@RequestMapping("lists")
-	public String lists(Model model) {
-		log.info("表示されるすべての情報");
-		List<Employee> employeeList=employeeService.lists();
-		model.addAttribute("employeeList",employeeList);		
-		return "emplist";
-	}
+
 }

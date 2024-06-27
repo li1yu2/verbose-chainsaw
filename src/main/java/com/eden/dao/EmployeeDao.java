@@ -12,6 +12,14 @@ public interface EmployeeDao {
 
 	Employee findById(Integer id);
 
+	void update(Employee employee);
+
+	void delete(Integer id);
+
+	
+
+
+
 	
 
 }

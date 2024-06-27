@@ -12,12 +12,13 @@ import com.eden.entity.Employee;
 @Service
 @Transactional
 public class EmployeeServiceImpl implements EmployeeService{
-
+	
 	@Autowired
 	private EmployeeDao employeeDao;
-	
+
 	@Override
 	public void save(Employee employee) {
+		
 		employeeDao.save(employee);
 	}
 
@@ -32,6 +33,18 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		return employeeDao.findById(id);
 	}
-	
+
+	@Override
+	public void update(Employee employee) {
+		
+		employeeDao.update(employee);
+	}
+
+	@Override
+	public void delete(Integer id) {
+		employeeDao.delete(id);
+		
+	}
+
 	
 }

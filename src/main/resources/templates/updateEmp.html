@@ -3,8 +3,7 @@
 	<head>
 		<title>update Emp</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<link rel="stylesheet" type="text/css"th:href="@{/css/style.css}"
-			href="css/style.css" />
+		<link rel="stylesheet" type="text/css"	th:href="@{/css/style.css}" />
 	</head>
 
 	<body>
@@ -20,7 +19,7 @@
 					</div>
 					<div id="topheader">
 						<h1 id="title">
-							<a href="/ems_vue/emplist.html">main</a>
+							<a href="/ems_vue/emplist.html">人事管理システム</a>
 						</h1>
 					</div>
 					<div id="navigation">
@@ -30,9 +29,9 @@
 					<p id="whereami">
 					</p>
 					<h1>
-						従業員の情報更新:
+						社員の情報更新
 					</h1>
-					<form th:action="@{/employee/update}" method="post" enctype="multipart/form-data"">
+					<form th:action="@{/employee/update}" method="post" enctype="multipart/form-data">
 						<table cellpadding="0" cellspacing="0" border="0"
 							class="form_table">
 							<tr>
@@ -40,7 +39,8 @@
 									番号:
 								</td>
 								<td valign="middle" align="left">
-									<span th:text="${employee.id}"
+									<span th:text="${employee.id}"/>
+									<input type="hidden" name="id" th:value="${employee.id}"/>
 								</td>
 							</tr>
 							<tr>
@@ -53,15 +53,16 @@
 							</tr>
 							<tr>
 								<td valign="middle" align="right">
-									 古い写真:
+									古い写真：
 								</td>
 								<td valign="middle" align="left">
 									<img th:src="@{/}+${employee.photo}" style="height: 60px;">
 								</td>
 							</tr>
+							
 							<tr>
 								<td valign="middle" align="right">
-									新しい写真:
+									更新したい写真:
 								</td>
 								<td valign="middle" align="left">
 									<input type="file" name="img" />
@@ -70,7 +71,7 @@
 							</tr>
 							<tr>
 								<td valign="middle" align="right">
-									給料:
+									月給:
 								</td>
 								<td valign="middle" align="left">
 									<input type="text" class="inputgri" name="salary" th:value="${employee.salary}"/>
@@ -81,13 +82,13 @@
 									誕生日:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="birthday"
-									 th:value="${#dates.format(employee.birthday,'yyyy/MM/dd')}"/>
+									<input type="text" class="inputgri" name="birthday" 
+									th:value="${#dates.format(employee.birthday,'yyyy/MM/dd')}"/>
 								</td>
 							</tr>
 						</table>
 						<p>
-							<input type="submit" class="button" value="提案する" />
+							<input type="submit" class="button" value="提出する" />
 						</p>
 					</form>
 				</div>

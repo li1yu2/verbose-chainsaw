@@ -382,6 +382,11 @@
 		background: #ffffff;
 		border: 1px solid #686868;
 	}
+	
+	.inputSearch{
+		width: 60px;
+		}
+	
 
 /* .notice - messages to user
 --------------------------------*/
