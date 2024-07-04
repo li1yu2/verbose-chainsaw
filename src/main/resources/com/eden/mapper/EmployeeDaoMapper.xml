@@ -23,4 +23,24 @@
 	<delete id="delete" parameterType="Integer">
 	delete from employee where id=#{id}
 	</delete>
+	<select id="searchEmp" resultType="Employee">
+	select * from employee 
+	<where>
+		<if test="searchName!=null">
+	 	name like concat('%',#{searchName},'%')
+	 	</if>
+	 	<if test="salaryBegin!=null">
+		and salary >= #{salaryBegin} 
+		</if>
+		<if test="salaryEnd!=null">
+		and salary &lt;= #{salaryEnd}
+		</if>
+		<if test="dateBegin!=''">
+		and birthday >= #{dateBegin} 
+		</if>
+		<if test="dateEnd!=''">
+		and birthday &lt;= #{dateEnd}
+		</if>
+	 </where>
+	 </select>
 </mapper>

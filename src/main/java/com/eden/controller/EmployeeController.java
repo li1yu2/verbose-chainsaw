@@ -29,6 +29,18 @@ public class EmployeeController {
 	@Value("${file.upload.dir}")
 	private String photoPath;
 	
+	@RequestMapping("search")
+	public String searchEmp(String searchName,Double salaryBegin,
+			Double salaryEnd, String dateBegin,String dateEnd,Model model) {
+		log.info("名前:{},最高給与{},最低給与{},開始時間{},終了時間{}",
+				searchName,salaryBegin,salaryEnd,dateBegin,dateEnd);
+		searchName=searchName.trim();
+		List<Employee> employeeList=employeeService.searchEmp(searchName,salaryBegin,salaryEnd,dateBegin,dateEnd);
+		model.addAttribute("employeeList", employeeList);
+		return "emplist";
+		
+	}
+	
 	@RequestMapping("delete")
 	public String delete(Integer id) {
 		log.info("削除を受け入れるID:{}",id);
@@ -100,11 +112,14 @@ public class EmployeeController {
 		
 		log.info("写真ファイル名：{},ファイルのサイズ：{}",img.getOriginalFilename(),img.getSize());
 		
-		String fileName=img.getOriginalFilename();
+		boolean notempty = !img.isEmpty();
+		if(notempty) {
+			String fileName=img.getOriginalFilename();
 		
 		String newfileName=uploadPhoto(img,fileName);
 		
 		employee.setPhoto(newfileName);
+		}
 		
 		employeeService.save(employee);
 		

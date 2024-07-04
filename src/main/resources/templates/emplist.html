@@ -4,6 +4,7 @@
     <title>emplist</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    <script th:src="@{/script/script.js}"></script>
     <!--link外部引入-->
     
 </head>
@@ -13,9 +14,10 @@
         <div id="header">
             <div id="rightheader">
                 <p>
-                    2009/11/20
+                    <div id="nowtime"></div>
                     <br/>
-                    <a href="javascript:;" @click="logout">安全退出</a>
+                    <a th:if="${session.admin!=null}" th:href="@{/admin/logout}">安全退出</a>
+                    <a th:if="${session.admin==null}" th:href="@{/login}">登录</a>
                 </p>
             </div>
             <div id="topheader">
@@ -33,14 +35,19 @@
                 ようこそ<span th:if="${session.admin!=null}" th:text="${session.admin.realname}"></span>
                 <span th:if="${session.admin==null}">お客様</span>
             </h1>
-        <div style="margin-bottom: 10px;text-align: right;">
-			<form>
+            
+        <div style="text-align: right;height:25px;">
+			<span id="Msg" style="color:red;"></span>
+		</div>
+            
+        <div style="margin-bottom: 10px;text-align:right;">
+			<form th:action="@{/employee/search}" method="post" onsubmit="return validOrNot()">
 				名前<input tyqe="text" class="inputSearch" name="searchName"/>
-				給料<input tyqe="text" class="inputSearch" name="salaryBegin"/>
-				~<input tyqe="text" class="inputSearch" name="salaryEnd"/>
-				誕生日<input tyqe="text" class="inputSearch" name="dateBegin"
+				給料<input tyqe="text" id="salaryBegin" class="inputSearch" name="salaryBegin"/>
+				~<input tyqe="text" id="salaryEnd" class="inputSearch" name="salaryEnd"/>
+				誕生日<input tyqe="text" id="dateBegin" class="inputSearch" name="dateBegin"
 				placeholder="2000/01/01"/>
-				<input tyqe="text" class="inputSearch" name="dateEnd"
+				<input tyqe="text" id="dateEnd" class="inputSearch" name="dateEnd"
 				placeholder="2000/01/01"/>
 				<input type="submit" value="検査コード"class="button"/>
 			 </form>
@@ -112,6 +119,83 @@
 	function addEmp(){
 		location.href='[[@{/addEmp}]]'
 	}
+	
+	var salaryBegin=document.getElementById('salaryBegin')
+	var salaryEnd=document.getElementById('salaryEnd')
+	
+	var dateBegin=document.getElementById('dateBegin')
+	var dateEnd=document.getElementById('dateEnd')
+	
+	var Msg=document.getElementById('Msg')
+	
+	function validOrNot(){
+				if (salaryValidBegin() && salaryValidEnd() && dateValidBegin() && dateValidEnd()) {
+			        return true
+			      } else{
+			        return false
+			    }
+			}
+			function salaryValidBegin(){
+				var salaryValue=salaryBegin.value
+				
+				var regxSalary = /^\d+(\.\d+)?$/
+				if (salaryValue.match(regxSalary)||salaryValue.trim()==='') {
+			        return true
+			    }else{
+					 Msg.innerHTML='誤っている給料を入力している。'
+					 setTimeout(function(){
+						Msg.innerHTML=''
+					 },5000)
+					 return false
+				}
+				}
+	function salaryValidEnd(){
+				var salaryValue=salaryEnd.value
+				
+				var regxSalary = /^\d+(\.\d+)?$/
+				if (salaryValue.match(regxSalary)||salaryValue.trim()==='') {
+			        return true
+			    }else{
+					 Msg.innerHTML='誤っている給料を入力している。'
+					 setTimeout(function(){
+						 Msg.innerHTML=''
+					 },5000)
+					 return false
+				}
+				}
+	function dateValidBegin(){
+				var dateValue=dateBegin.value
+				var regxDate = /^(18|19|20)\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/
+				
+				if (dateValue.match(regxDate)||dateValue.trim()==='') {
+			        return true
+			      }else{
+					 Msg.innerHTML='誤っている日付を入力している。'
+					 setTimeout(function(){
+						 Msg.innerHTML=''
+					 },5000)
+					 return false
+				  }
+				  }
+	function dateValidEnd(){
+				var dateValue=dateEnd.value
+				var regxDate = /^(18|19|20)\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/
+				
+				if (dateValue.match(regxDate)||dateValue.trim()==='') {
+			        return true
+			      }else{
+					 Msg.innerHTML='誤っている日付を入力している。'
+					 setTimeout(function(){
+						 Msg.innerHTML=''
+					 },5000)
+					 return false
+					}
+					}
+		var nowtime=document.getElementById('nowtime')
+			setInterval(()=>{
+				nowtime.innerHTML=getJapTime()
+			},1000)
+			
 </script>
 </body>
 </html>

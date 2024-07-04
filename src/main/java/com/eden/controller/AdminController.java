@@ -27,6 +27,13 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
+	@RequestMapping("logout")
+	public String logout(HttpSession sessin) {
+		
+		sessin.invalidate();
+		return "redirect:/login";
+	}
+	
 	@RequestMapping("login")
 	public String login(String adminname,String password,HttpSession session) throws UnsupportedEncodingException {
 		log.info("レビュー管理者名:{}パスワード:{}",adminname,password);
@@ -42,7 +49,7 @@ public class AdminController {
 			return "redirect:/login?msg="+URLEncoder.encode(e.getMessage(),"UTF-8");
 		}
 		
-		return "emplist";
+		return "redirect:/employee/lists";
 	}
 
 	@RequestMapping("register")

@@ -16,6 +16,8 @@ public interface EmployeeDao {
 
 	void delete(Integer id);
 
+	List<Employee> searchEmp(String searchName, Double salaryBegin, Double salaryEnd, String dateBegin, String dateEnd);
+
 	
 
 

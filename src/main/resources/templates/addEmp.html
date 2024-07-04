@@ -32,9 +32,8 @@
 					<h1>
 						従業員ページ
 					</h1>
-					<form th:action="@{/employee/save}" method="post" enctype="multipart/form-data">
-						<table cellpadding="0" cellspacing="0" border="0"
-							class="form_table">
+					<form th:action="@{/employee/save}" method="post" enctype="multipart/form-data" onsubmit="return validOrNot()">	
+						<table cellpadding="0" cellspacing="0" border="0"class="form_table">
 							<tr>
 								<td valign="middle" align="right">
 									名前:
@@ -56,7 +55,8 @@
 									給料:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri"name="salary" />
+									<input type="text" id="salaryInput" class="inputgri"name="salary" />
+									<span id="salaryMsg" style="color:red;"></span>
 								</td>
 							</tr>
 							<tr>
@@ -64,7 +64,8 @@
 									誕生日:
 								</td>
 								<td valign="middle" align="left">
-									<input type="text" class="inputgri" name="birthday" />
+									<input type="text" id="birthdate" class="inputgri" name="birthday" placeholder="2000/01/01" />
+									<span id="dateMsg" style="color:red;"></span>
 								</td>
 							</tr>
 						</table>
@@ -80,65 +81,52 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			var dateInput=document.getElementById('birthdate');
+			var dateMsg=document.getElementById('dateMsg');
+			
+			var salaryInput=document.getElementById('salaryInput');
+			var salaryMsg=document.getElementById('salaryMsg');
+			
+			function validOrNot(){
+				if (salaryValid() && dateValid()) {
+			        return true
+			      } else{
+			        return false
+			    }
+			}
+			
+			
+			function dateValid(){
+				var dateValue=dateInput.value
+				var regxDate = /^(18|19|20)\d{2}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])$/
+				
+				if (dateValue.match(regxDate)) {
+			        return true
+			      }else{
+					 dateMsg.innerHTML='誤っている日付を入力している。'
+					 setTimeout(function(){
+						 dateMsg.innerHTML=''
+					 },5000)
+					 return false
+				  }
+				  
+			}
+			function salaryValid(){
+				var salaryValue=salaryInput.value
+				
+				var regxSalary = /^\d+(\.\d+)?$/
+				if (salaryValue.match(regxSalary)) {
+			        return true
+			    }else{
+					 salaryMsg.innerHTML='誤っている給料を入力している。'
+					 setTimeout(function(){
+						 salaryMsg.innerHTML=''
+					 },5000)
+					 return false
+				}
+
+			}
+		</script>
 	</body>
 </html>
-<script src="/ems_vue/js/vue.js"></script>
-<script src="/ems_vue/js/axios.min.js"></script>
-<script>
-	var app = new Vue({
-		el: "#wrap",
-		data: {  //数据
-			user:{
-				realname:"",
-			},//用来存放用户登录信息
-			emp:{}//定义员工信息
-		},
-		methods: { //自定义函数
-			//处理安全退出
-			logout(){
-				localStorage.removeItem("user");
-				location.reload(true);//刷新页面
-			},
-			//用来保存员工信息
-			saveEmp(){
-				console.log(this.emp); //员工信息
-				console.log(this.$refs.myPhoto.files[0]);//获取文件信息
-				//文件上传时 请求方式必须是post  enctype必须为multipart/form-data
-				var formData = new FormData();
-				formData.append("name",this.emp.name);
-				formData.append("salary",this.emp.salary);
-				formData.append("age",this.emp.age);
-				formData.append("photo",this.$refs.myPhoto.files[0]);
-				var _this = this;
-				axios({
-					method:"post",
-					url:"http://localhost:8989/ems_vue/emp/save",
-					data:formData,
-					headers:{
-						'content-type':'multipart/form-data'
-					}
-				}).then(res=>{
-					console.log(res.data);
-					if(res.data.state){
-						if(window.confirm(res.data.msg+",点击确定跳转到列表页面!")){
-							location.href="/ems_vue/emplist.html";
-						}else{
-							_this.emp = {};
-						}
-					}else{
-						alert(res.data.msg);
-					}
-				});
-			}
-		},
-		created(){//生命周期函数
-			var userString = localStorage.getItem("user");
-			if(userString){
-				this.user =  JSON.parse(userString);
-			}else{
-				alert("您尚未登录,点击确定跳转至登录页面!");
-				location.href ="/ems_vue/login.html";
-			}
-		}
-	});
-</script>

@@ -46,5 +46,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 	}
 
+	@Override
+	public List<Employee> searchEmp(String searchName, Double salaryBegin, Double salaryEnd, String dateBegin,
+			String dateEnd) {
+		
+		return employeeDao.searchEmp(searchName,salaryBegin,salaryEnd,dateBegin,dateEnd);
+	}
+
+	
 	
 }
