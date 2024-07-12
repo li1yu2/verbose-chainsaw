@@ -11,7 +11,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url:  jdbc:mysql://localhost:3306/manageemp?characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/manageemp?characterEncoding=UTF-8
     username: root
     password: 123456
   web:
@@ -27,7 +27,7 @@ file:
   dir: C:\\Java2023\\workspace\\0620\\manageemp\\upload
   
 logging:
-  level:
-   root: info
-   '[com.eden]': debug
+   level:
+    root: info
+    '[com.eden]': debug
     

@@ -8,7 +8,7 @@
 		insert into `employee` values(#{id},#{name},#{salary},#{birthday},#{photo})
 	</insert>
 	
-	<select id="lists" resultType="Employee">
+	<select id="lists" resultType="com.eden.entity.Employee">
 		select * from employee
 	</select>
 	

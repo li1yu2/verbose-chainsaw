@@ -47,6 +47,10 @@ public class EmployeeController {
 		
 		String delephoto = employeeService.findById(id).getPhoto();
 		
+		if(delephoto==null) {
+			delephoto=new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+		}
+		
 		File file= new File(photoPath,delephoto);
 		
 		if(file.exists()) {
@@ -69,9 +73,9 @@ public class EmployeeController {
 			//古い写真のファイル削除する処理。
 			String oldphoto=employeeService.findById(employee.getId()).getPhoto();
 			
-			/*if(oldphoto==null) {
+			if(oldphoto==null) {
 				oldphoto=new SimpleDateFormat("yyyyMMddmmssSSS").format(new Date());
-			}*/
+			}
 			
 			File file = new File(photoPath,oldphoto);
 			

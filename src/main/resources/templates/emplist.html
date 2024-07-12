@@ -12,13 +12,13 @@
 <div id="wrap">
     <div id="top_content">
         <div id="header">
-            <div id="rightheader">
-                <p>
+            <div id="rightheader" style="margin-top: 30px;margin-right: 15px;">
+               <div style="margin-left: 10px;">
                     <div id="nowtime"></div>
                     <br/>
                     <a th:if="${session.admin!=null}" th:href="@{/admin/logout}">安全退出</a>
                     <a th:if="${session.admin==null}" th:href="@{/login}">登录</a>
-                </p>
+                </div>
             </div>
             <div id="topheader">
                 <h1 id="title">
