@@ -3,6 +3,8 @@ package com.eden.controller;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.eden.entity.Admin;
 import com.eden.service.AdminService;
+import com.eden.utils.JwtUtils;
 import com.eden.utils.VerifyCodeUtils;
 
 import jakarta.servlet.ServletOutputStream;
@@ -41,8 +44,17 @@ public class AdminController {
 		try {
 			Admin admin=adminService.login(adminname, password);
 			session.setAttribute("admin", admin);
-		
 			
+			if(admin !=null) {
+			//登录，令牌,令牌发行
+			Map<String,Object> claims=new HashMap<>();
+			claims.put("id",admin.getId());
+			claims.put("name",admin.getAdminname());
+			
+			String jwt = JwtUtils.generateJwt(claims);
+			
+			session.setAttribute("token", jwt);
+			}
 		} catch (Exception e) {
 			
 			e.printStackTrace();
